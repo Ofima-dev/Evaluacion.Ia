@@ -1,6 +1,0 @@
-@Evaluacion.IA.API_HostAddress = http://localhost:5044
-
-GET {{Evaluacion.IA.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
