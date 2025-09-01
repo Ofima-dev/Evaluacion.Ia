@@ -1,19 +1,19 @@
-using System;
+using Evaluacion.IA.Domain.Primitives;
+using Evaluacion.IA.Domain.ValueObjects;
 
 namespace Evaluacion.IA.Domain.Entities
 {
-    public class User
+    public class User : Entity
     {
-        public int Id { get; private set; }
-        public string Email { get; private set; }
+        public Email Email { get; private set; }
         public string PasswordHash { get; private set; }
         public int RoleId { get; private set; }
         public Role? Role { get; private set; }
         public DateTime CreateAt { get; private set; }
 
-    private User() { Email = string.Empty; PasswordHash = string.Empty; }
+        private User() { Email = Email.Create("temp@temp.com"); PasswordHash = string.Empty; }
 
-        public User(string email, string passwordHash, int roleId)
+        public User(Email email, string passwordHash, int roleId)
         {
             Email = email;
             PasswordHash = passwordHash;

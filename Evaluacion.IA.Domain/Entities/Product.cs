@@ -1,25 +1,29 @@
-using System;
-using System.Collections.Generic;
+using Evaluacion.IA.Domain.Primitives;
+using Evaluacion.IA.Domain.ValueObjects;
 
 namespace Evaluacion.IA.Domain.Entities
 {
-    public class Product
+    public class Product : Entity
     {
-        public int Id { get; private set; }
-        public string Sku { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public decimal Price { get; private set; }
+        public Sku Sku { get; private set; }
+        public Name Name { get; private set; }
+        public Description Description { get; private set; }
+        public Money Price { get; private set; }
         public int CategoryId { get; private set; }
         public Category? Category { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime CreateAt { get; private set; }
-        private readonly List<ProductImage> _productImages = new();
+        private readonly List<ProductImage> _productImages = [];
         public IReadOnlyCollection<ProductImage> ProductImages => _productImages.AsReadOnly();
 
-    private Product() { Sku = string.Empty; Name = string.Empty; Description = string.Empty; }
+        private Product() { 
+            Sku = Sku.Create("TEMP-001"); 
+            Name = Name.Create("Temp"); 
+            Description = Description.Create("Temp"); 
+            Price = Money.Create(0);
+        }
 
-        public Product(string sku, string name, string description, decimal price, int categoryId, bool isActive)
+        public Product(Sku sku, Name name, Description description, Money price, int categoryId, bool isActive)
         {
             Sku = sku;
             Name = name;

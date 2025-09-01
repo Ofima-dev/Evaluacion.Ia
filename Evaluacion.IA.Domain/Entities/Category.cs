@@ -1,24 +1,23 @@
-using System;
-using System.Collections.Generic;
+using Evaluacion.IA.Domain.Primitives;
+using Evaluacion.IA.Domain.ValueObjects;
 
 namespace Evaluacion.IA.Domain.Entities
 {
-    public class Category
+    public class Category : Entity
     {
-        public int Id { get; private set; }
-        public string Name { get; private set; }
+        public Name Name { get; private set; }
         public int? ParentCategoryId { get; private set; }
         public Category? ParentCategory { get; private set; }
-        private readonly List<Category> _subCategories = new();
+        private readonly List<Category> _subCategories = [];
         public IReadOnlyCollection<Category> SubCategories => _subCategories.AsReadOnly();
         public bool IsActive { get; private set; }
         public DateTime CreateAt { get; private set; }
         private readonly List<Product> _products = [];
         public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
-    private Category() { Name = string.Empty; }
+        private Category() { Name = Name.Create("Temp"); }
 
-        public Category(string name, bool isActive, int? parentCategoryId = null)
+        public Category(Name name, bool isActive, int? parentCategoryId = null)
         {
             Name = name;
             IsActive = isActive;

@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+using Evaluacion.IA.Domain.Primitives;
+using Evaluacion.IA.Domain.ValueObjects;
 
 namespace Evaluacion.IA.Domain.Entities
 {
-    public class Role
+    public class Role : Entity
     {
-        public int Id { get; private set; }
-        public string Description { get; private set; }
-        private readonly List<User> _users = new();
+        public Description Description { get; private set; }
+        private readonly List<User> _users = [];
         public IReadOnlyCollection<User> Users => _users.AsReadOnly();
 
-    private Role() { Description = string.Empty; }
+        private Role() { Description = Description.Create("Temp"); }
 
-        public Role(string description)
+        public Role(Description description)
         {
             Description = description;
         }
