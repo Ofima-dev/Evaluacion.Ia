@@ -1,0 +1,14 @@
+using MediatR;
+using Evaluacion.IA.Application.Common;
+using Evaluacion.IA.Application.DTOs;
+
+namespace Evaluacion.IA.Application.UseCases.Products.Commands;
+
+public sealed record CreateProductCommand(
+    string Sku,
+    string Name,
+    string Description,
+    decimal Price,
+    string Currency,
+    int CategoryId
+) : IRequest<ApiResponse<ProductDto>>;

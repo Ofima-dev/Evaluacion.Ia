@@ -13,6 +13,7 @@ namespace Evaluacion.IA.Domain.Entities
         public Category? Category { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime CreateAt { get; private set; }
+        public DateTime? UpdateAt { get; private set; }
         private readonly List<ProductImage> _productImages = [];
         public IReadOnlyCollection<ProductImage> ProductImages => _productImages.AsReadOnly();
 
@@ -20,10 +21,10 @@ namespace Evaluacion.IA.Domain.Entities
             Sku = Sku.Create("TEMP-001"); 
             Name = Name.Create("Temp"); 
             Description = Description.Create("Temp"); 
-            Price = Money.Create(0);
+            Price = Money.Create(0, "USD");
         }
 
-        public Product(Sku sku, Name name, Description description, Money price, int categoryId, bool isActive)
+        public Product(Sku sku, Name name, Description description, Money price, int categoryId, bool isActive = true)
         {
             Sku = sku;
             Name = name;
@@ -34,10 +35,50 @@ namespace Evaluacion.IA.Domain.Entities
             CreateAt = DateTime.UtcNow;
         }
 
+        public void UpdateDetails(Name name, Description description, Money price, int categoryId, bool isActive)
+        {
+            Name = name;
+            Description = description;
+            Price = price;
+            CategoryId = categoryId;
+            IsActive = isActive;
+            UpdateAt = DateTime.UtcNow;
+        }
+
+        public void UpdatePrice(Money newPrice)
+        {
+            Price = newPrice;
+            UpdateAt = DateTime.UtcNow;
+        }
+
+        public void Activate()
+        {
+            IsActive = true;
+            UpdateAt = DateTime.UtcNow;
+        }
+
+        public void Deactivate()
+        {
+            IsActive = false;
+            UpdateAt = DateTime.UtcNow;
+        }
+
+        public void SetCategory(Category category)
+        {
+            Category = category;
+            CategoryId = category.Id;
+            UpdateAt = DateTime.UtcNow;
+        }
+
         public void AddProductImage(ProductImage image)
         {
             if (!_productImages.Contains(image))
                 _productImages.Add(image);
+        }
+
+        public void RemoveProductImage(ProductImage image)
+        {
+            _productImages.Remove(image);
         }
     }
 }

@@ -36,6 +36,53 @@ namespace Evaluacion.IA.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(expression);
         }
 
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _dbSet.AnyAsync(expression);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? expression = null)
+        {
+            return expression == null 
+                ? await _dbSet.CountAsync() 
+                : await _dbSet.CountAsync(expression);
+        }
+
+        public async Task<int> CountAsync(IQueryable<T> query)
+        {
+            return await query.CountAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetPagedAsync(IQueryable<T> query, int page, int pageSize)
+        {
+            return await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetPagedAsync(int page, int pageSize)
+        {
+            return await _dbSet
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetPagedAsync(Expression<Func<T, bool>> filter, int page, int pageSize)
+        {
+            return await _dbSet
+                .Where(filter)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public IQueryable<T> GetQueryable()
+        {
+            return _dbSet.AsQueryable();
+        }
+
         public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
