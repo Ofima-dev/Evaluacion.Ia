@@ -1,18 +1,21 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.Services;
 using Evaluacion.IA.Domain.ValueObjects;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Commands;
 
 public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, ApiResponse<ProductDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageStorageService _imageStorageService;
 
-    public UpdateProductCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateProductCommandHandler(IUnitOfWork unitOfWork, IImageStorageService imageStorageService)
     {
         _unitOfWork = unitOfWork;
+        _imageStorageService = imageStorageService;
     }
 
     public async Task<ApiResponse<ProductDto>> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
@@ -91,8 +94,7 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
                 pi.Id,
                 pi.ImageUrl.Value,
                 pi.Alt.Value,
-                pi.Order,
-                pi.IsPrimary
+                pi.Order
             )).ToList();
 
             // Crear DTO de respuesta
@@ -107,8 +109,7 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
                 category.Name.Value,
                 product.IsActive,
                 product.CreateAt,
-                product.UpdateAt,
-                imageDtos
+                Image: await _imageStorageService.GetImageAsync(imageDtos.First()?.Url)
             );
 
             return ApiResponse<ProductDto>.Success(productDto, "Producto actualizado exitosamente");

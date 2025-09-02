@@ -6,7 +6,7 @@ namespace Evaluacion.IA.Domain.ValueObjects
     public sealed class Email : ValueObject
     {
         private const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-        
+
         public string Value { get; private set; }
 
         private Email(string value)

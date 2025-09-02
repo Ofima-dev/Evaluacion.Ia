@@ -1,6 +1,6 @@
+using Evaluacion.IA.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Evaluacion.IA.Domain.Entities;
 
 namespace Evaluacion.IA.Infrastructure.Data.Configurations
 {
@@ -8,42 +8,32 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductImage> builder)
         {
-            builder.ToTable("ProductImages");
+            builder.ToTable("product_image");
 
             builder.HasKey(pi => pi.Id);
 
             builder.Property(pi => pi.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(pi => pi.ProductId)
+            builder.Property(pi => pi.ProductId).HasColumnName("product_id")
                 .IsRequired();
 
-            builder.Property(pi => pi.ImageUrl)
+            builder.Property(pi => pi.ImageUrl).HasColumnName("url")
                 .IsRequired()
                 .HasMaxLength(255)
                 .HasConversion(
                     url => url.Value,
                     value => Evaluacion.IA.Domain.ValueObjects.Url.Create(value));
 
-            builder.Property(pi => pi.Alt)
+            builder.Property(pi => pi.Alt).HasColumnName("alt_text")
                 .IsRequired()
                 .HasMaxLength(255)
                 .HasConversion(
                     alt => alt.Value,
                     value => Evaluacion.IA.Domain.ValueObjects.Description.Create(value));
 
-            builder.Property(pi => pi.Order)
+            builder.Property(pi => pi.Order).HasColumnName("sort_order")
                 .IsRequired();
-
-            builder.Property(pi => pi.IsPrimary)
-                .IsRequired()
-                .HasDefaultValue(false);
-
-            builder.Property(pi => pi.CreateAt)
-                .IsRequired();
-
-            builder.Property(pi => pi.UpdateAt)
-                .IsRequired(false);
 
             builder.HasOne(pi => pi.Product)
                 .WithMany(p => p.ProductImages)
@@ -52,9 +42,6 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
 
             builder.HasIndex(pi => new { pi.ProductId, pi.Order })
                 .IsUnique();
-
-            builder.HasIndex(pi => new { pi.ProductId, pi.IsPrimary })
-                .HasFilter("IsPrimary = 1");
         }
     }
 }

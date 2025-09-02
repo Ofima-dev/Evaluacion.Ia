@@ -20,7 +20,7 @@ namespace Evaluacion.IA.Domain.ValueObjects
                 throw new ArgumentException("Name must be between 2 and 100 characters", nameof(value));
 
             var trimmedValue = value.Trim();
-            
+
             return new Name(trimmedValue.ToLowerInvariant());
         }
 

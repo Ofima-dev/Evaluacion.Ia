@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Queries;
 

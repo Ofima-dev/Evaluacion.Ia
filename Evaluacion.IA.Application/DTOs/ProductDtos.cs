@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+
 namespace Evaluacion.IA.Application.DTOs;
 
 public sealed record ProductDto(
@@ -11,8 +13,7 @@ public sealed record ProductDto(
     string CategoryName,
     bool IsActive,
     DateTime CreatedAt,
-    DateTime? UpdatedAt,
-    List<ProductImageDto> Images
+    Stream? Image
 );
 
 public sealed record CreateProductDto(
@@ -21,7 +22,8 @@ public sealed record CreateProductDto(
     string Description,
     decimal Price,
     string Currency,
-    int CategoryId
+    int CategoryId,
+    IFormFile Image
 );
 
 public sealed record UpdateProductDto(

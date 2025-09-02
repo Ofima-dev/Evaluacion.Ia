@@ -17,7 +17,7 @@ namespace Evaluacion.IA.Application.Settings
         public class MediatROptions
         {
             public const string SectionName = "MediatR";
-            
+
             public bool EnableLogging { get; set; } = true;
             public bool EnablePerformanceTracking { get; set; } = true;
             public int TimeoutSeconds { get; set; } = 30;
@@ -29,7 +29,7 @@ namespace Evaluacion.IA.Application.Settings
         public class ValidationOptions
         {
             public const string SectionName = "Validation";
-            
+
             public bool EnableValidation { get; set; } = true;
             public bool ValidateOnCreate { get; set; } = true;
             public bool ValidateOnUpdate { get; set; } = true;
@@ -42,7 +42,7 @@ namespace Evaluacion.IA.Application.Settings
         public class PaginationOptions
         {
             public const string SectionName = "Pagination";
-            
+
             public int DefaultPageSize { get; set; } = 10;
             public int MaxPageSize { get; set; } = 100;
             public int MinPageSize { get; set; } = 1;
@@ -54,7 +54,7 @@ namespace Evaluacion.IA.Application.Settings
         public class CacheOptions
         {
             public const string SectionName = "Cache";
-            
+
             public bool EnableCaching { get; set; } = true;
             public int DefaultCacheDurationMinutes { get; set; } = 30;
             public int MaxCacheDurationMinutes { get; set; } = 1440; // 24 horas
@@ -117,7 +117,7 @@ namespace Evaluacion.IA.Application.Settings
             {
                 // Registrar handlers del assembly actual
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                
+
                 // Configurar comportamientos (pipelines)
                 // cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
                 // cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
@@ -142,7 +142,7 @@ namespace Evaluacion.IA.Application.Settings
         {
             // Registrar servicios de dominio específicos aquí
             // Por ejemplo: services.AddScoped<IDomainService, DomainService>();
-            
+
             // Configurar AutoMapper si está disponible
             try
             {
@@ -170,7 +170,7 @@ namespace Evaluacion.IA.Application.Settings
             {
                 var defaultPageSize = paginationSection.GetValue<int>("DefaultPageSize");
                 var maxPageSize = paginationSection.GetValue<int>("MaxPageSize");
-                
+
                 if (defaultPageSize > maxPageSize)
                 {
                     throw new InvalidOperationException(
@@ -184,7 +184,7 @@ namespace Evaluacion.IA.Application.Settings
             {
                 var defaultDuration = cacheSection.GetValue<int>("DefaultCacheDurationMinutes");
                 var maxDuration = cacheSection.GetValue<int>("MaxCacheDurationMinutes");
-                
+
                 if (defaultDuration > maxDuration)
                 {
                     throw new InvalidOperationException(
@@ -204,7 +204,7 @@ namespace Evaluacion.IA.Application.Settings
             {
                 // Obtener información básica sobre la aplicación
                 var assemblyName = Assembly.GetExecutingAssembly().FullName ?? "Unknown";
-                
+
                 return new ApplicationStatistics
                 {
                     RegisteredHandlers = 0, // Simplificado por ahora
@@ -236,13 +236,13 @@ namespace Evaluacion.IA.Application.Settings
             try
             {
                 var stats = GetApplicationStatistics(serviceProvider);
-                
+
                 logger.LogInformation("=== Application Layer Configuration Summary ===");
                 logger.LogInformation("Assembly: {Assembly}", stats.ApplicationAssembly);
                 logger.LogInformation("Registered Handlers: {HandlerCount}", stats.RegisteredHandlers);
                 logger.LogInformation("MediatR Configured: {MediatRConfigured}", stats.MediatRConfigured);
                 logger.LogInformation("Configuration Validated: {ConfigValidated}", stats.ConfigurationValidated);
-                
+
                 if (!string.IsNullOrEmpty(stats.ErrorMessage))
                 {
                     logger.LogWarning("Configuration Warning: {Error}", stats.ErrorMessage);

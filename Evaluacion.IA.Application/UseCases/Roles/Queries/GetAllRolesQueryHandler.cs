@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.UseCases.Roles.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.UseCases.Roles.DTOs;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Roles.Queries
 {
@@ -19,13 +19,13 @@ namespace Evaluacion.IA.Application.UseCases.Roles.Queries
             try
             {
                 var roles = await _unitOfWork.Roles.GetAllAsync();
-                
+
                 var roleDtos = new List<RoleDto>();
 
                 foreach (var role in roles)
                 {
                     var userCount = 0;
-                    
+
                     if (request.IncludeUserCount)
                     {
                         var users = await _unitOfWork.Users.FindAsync(u => u.RoleId == role.Id);

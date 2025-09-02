@@ -1,6 +1,6 @@
+using Evaluacion.IA.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Evaluacion.IA.Domain.Entities;
 
 namespace Evaluacion.IA.Infrastructure.Data.Configurations
 {

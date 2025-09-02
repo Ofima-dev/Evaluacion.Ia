@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Evaluacion.IA.Application.Common;
+using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.UseCases.Products.Commands;
 using Evaluacion.IA.Application.UseCases.Products.Queries;
-using Evaluacion.IA.Application.DTOs;
-using Evaluacion.IA.Application.Common;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Evaluacion.IA.API.Controllers;
 
@@ -122,7 +122,9 @@ public class ProductsController : ControllerBase
             createProductDto.Description,
             createProductDto.Price,
             createProductDto.Currency,
-            createProductDto.CategoryId
+            createProductDto.CategoryId,
+            createProductDto.Image,
+            "Img"
         );
 
         var result = await _mediator.Send(command);

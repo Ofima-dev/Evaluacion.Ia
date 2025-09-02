@@ -1,17 +1,20 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.Services;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Queries;
 
 public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ApiResponse<ProductDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageStorageService _imageStorageService;
 
-    public GetProductByIdQueryHandler(IUnitOfWork unitOfWork)
+    public GetProductByIdQueryHandler(IUnitOfWork unitOfWork, IImageStorageService imageStorageService)
     {
         _unitOfWork = unitOfWork;
+        _imageStorageService = imageStorageService;
     }
 
     public async Task<ApiResponse<ProductDto>> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
@@ -50,8 +53,7 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
                 pi.Id,
                 pi.ImageUrl.Value,
                 pi.Alt.Value,
-                pi.Order,
-                pi.IsPrimary
+                pi.Order
             )).ToList();
 
             // Crear el DTO
@@ -66,8 +68,7 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
                 categoryName,
                 product.IsActive,
                 product.CreateAt,
-                product.UpdateAt,
-                imageDtos
+                await _imageStorageService.GetImageAsync(imageDtos.First()?.Url)
             );
 
             return ApiResponse<ProductDto>.Success(productDto);

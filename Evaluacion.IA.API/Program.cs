@@ -1,6 +1,6 @@
-using Evaluacion.IA.Infrastructure.Settings;
-using Evaluacion.IA.Application.Settings;
 using Evaluacion.IA.API.Settings;
+using Evaluacion.IA.Application.Settings;
+using Evaluacion.IA.Infrastructure.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 

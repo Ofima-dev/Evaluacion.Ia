@@ -1,6 +1,6 @@
+using Evaluacion.IA.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Evaluacion.IA.Domain.Entities;
 
 namespace Evaluacion.IA.Infrastructure.Data.Configurations
 {
@@ -8,7 +8,7 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.ToTable("Roles");
+            builder.ToTable("roles");
 
             builder.HasKey(r => r.Id);
 
@@ -18,7 +18,7 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
             builder.Property(r => r.Description)
                 .IsRequired()
                 .HasMaxLength(50)
-                .HasColumnName("Name")
+                .HasColumnName("name")
                 .HasConversion(
                     description => description.Value,
                     value => Evaluacion.IA.Domain.ValueObjects.Description.Create(value));

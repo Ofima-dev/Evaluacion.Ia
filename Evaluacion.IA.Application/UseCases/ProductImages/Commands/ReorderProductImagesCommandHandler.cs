@@ -1,6 +1,6 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 
@@ -69,9 +69,8 @@ public sealed class ReorderProductImagesCommandHandler : IRequestHandler<Reorder
                 var image = imagesList.First(pi => pi.Id == imageOrder.ImageId);
                 var url = image.ImageUrl;
                 var alt = image.Alt;
-                var isPrimary = image.IsPrimary;
-                
-                image.UpdateDetails(url, alt, imageOrder.NewOrder, isPrimary);
+
+                image.UpdateDetails(url, alt, imageOrder.NewOrder);
                 _unitOfWork.ProductImages.Update(image);
             }
 

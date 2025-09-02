@@ -15,7 +15,8 @@ namespace Evaluacion.IA.Domain.Entities
         private readonly List<Product> _products = [];
         public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
 
-        private Category() { 
+        private Category()
+        {
             Name = Name.Create("Temp");
         }
 
@@ -27,19 +28,19 @@ namespace Evaluacion.IA.Domain.Entities
             CreateAt = DateTime.UtcNow;
         }
 
-        public void UpdateDetails(Name name, Description description, bool isActive)
+        public void UpdateDetails(Name name, bool isActive)
         {
             Name = name;
             IsActive = isActive;
         }
 
-        public void Activate() 
-        { 
+        public void Activate()
+        {
             IsActive = true;
         }
 
-        public void Deactivate() 
-        { 
+        public void Deactivate()
+        {
             IsActive = false;
         }
 

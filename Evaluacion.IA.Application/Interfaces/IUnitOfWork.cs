@@ -9,7 +9,7 @@ namespace Evaluacion.IA.Application.Interfaces
         IRepository<Category> Categories { get; }
         IRepository<Product> Products { get; }
         IRepository<ProductImage> ProductImages { get; }
-        
+
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

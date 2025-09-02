@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Queries;
 
@@ -64,7 +64,7 @@ public sealed class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQ
             // Aplicar ordenamiento
             query = request.SortBy.ToLower() switch
             {
-                "name" => request.SortDescending ? query.OrderByDescending(p => p.Name.Value) : query.OrderBy(p => p.Name.Value),
+                "name" => request.SortDescending ? query.OrderByDescending(p => p.Name.Value) : query.OrderBy(p => p.Name),
                 "price" => request.SortDescending ? query.OrderByDescending(p => p.Price.Amount) : query.OrderBy(p => p.Price.Amount),
                 "sku" => request.SortDescending ? query.OrderByDescending(p => p.Sku.Value) : query.OrderBy(p => p.Sku.Value),
                 "createdat" => request.SortDescending ? query.OrderByDescending(p => p.CreateAt) : query.OrderBy(p => p.CreateAt),

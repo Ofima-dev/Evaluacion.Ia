@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
+using Evaluacion.IA.Application.Common;
+using Evaluacion.IA.Application.UseCases.Auth.Commands;
 using Evaluacion.IA.Application.UseCases.Users.Commands;
 using Evaluacion.IA.Application.UseCases.Users.DTOs;
-using Evaluacion.IA.Application.UseCases.Auth.Commands;
-using Evaluacion.IA.Application.Common;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Evaluacion.IA.API.Controllers;
 

@@ -16,7 +16,6 @@ public sealed record CreateCategoryDto(
 public sealed record UpdateCategoryDto(
     int Id,
     string Name,
-    string Description,
     bool IsActive
 );
 

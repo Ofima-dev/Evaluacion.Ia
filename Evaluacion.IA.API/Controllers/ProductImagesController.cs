@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Evaluacion.IA.Application.Common;
+using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 using Evaluacion.IA.Application.UseCases.ProductImages.Queries;
-using Evaluacion.IA.Application.DTOs;
-using Evaluacion.IA.Application.Common;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Evaluacion.IA.API.Controllers;
 
@@ -79,8 +79,7 @@ public class ProductImagesController : ControllerBase
             addImageDto.ProductId,
             addImageDto.ImageUrl,
             addImageDto.Alt,
-            addImageDto.Order,
-            addImageDto.IsPrimary
+            addImageDto.Order
         );
 
         var result = await _mediator.Send(command);

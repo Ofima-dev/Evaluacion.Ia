@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Evaluacion.IA.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Evaluacion.IA.Infrastructure.Data
 {

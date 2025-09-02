@@ -9,18 +9,18 @@ namespace Evaluacion.IA.Domain.Entities
         public Name Name { get; private set; }
         public Description Description { get; private set; }
         public Money Price { get; private set; }
-    public int? CategoryId { get; private set; }
+        public int? CategoryId { get; private set; }
         public Category? Category { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime CreateAt { get; private set; }
-        public DateTime? UpdateAt { get; private set; }
         private readonly List<ProductImage> _productImages = [];
         public IReadOnlyCollection<ProductImage> ProductImages => _productImages.AsReadOnly();
 
-        private Product() { 
-            Sku = Sku.Create("TEMP-001"); 
-            Name = Name.Create("Temp"); 
-            Description = Description.Create("Temp"); 
+        private Product()
+        {
+            Sku = Sku.Create("TEMP-001");
+            Name = Name.Create("Temp");
+            Description = Description.Create("Temp");
             Price = Money.Create(0, "USD");
         }
 
@@ -43,32 +43,27 @@ namespace Evaluacion.IA.Domain.Entities
             Price = price;
             CategoryId = categoryId;
             IsActive = isActive;
-            UpdateAt = DateTime.UtcNow;
         }
 
         public void UpdatePrice(Money newPrice)
         {
             Price = newPrice;
-            UpdateAt = DateTime.UtcNow;
         }
 
         public void Activate()
         {
             IsActive = true;
-            UpdateAt = DateTime.UtcNow;
         }
 
         public void Deactivate()
         {
             IsActive = false;
-            UpdateAt = DateTime.UtcNow;
         }
 
         public void SetCategory(Category category)
         {
             Category = category;
             CategoryId = category.Id;
-            UpdateAt = DateTime.UtcNow;
         }
 
         public void AddProductImage(ProductImage image)

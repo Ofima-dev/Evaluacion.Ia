@@ -1,8 +1,8 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
 using Evaluacion.IA.Domain.ValueObjects;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Commands;
 
@@ -30,11 +30,6 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
                 return ApiResponse<CategoryDto>.Failure("El nombre de la categoría es requerido");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Description))
-            {
-                return ApiResponse<CategoryDto>.Failure("La descripción de la categoría es requerida");
-            }
-
             // Buscar la categoría existente
             var category = await _unitOfWork.Categories.GetByIdAsync(request.Id);
             if (category is null)
@@ -44,16 +39,15 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
 
             // Verificar si el nombre ya existe en otra categoría
             var name = Name.Create(request.Name);
-            var existingCategory = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == name  && c.Id != request.Id);
+            var existingCategory = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == name && c.Id != request.Id);
 
             if (existingCategory is not null)
             {
                 return ApiResponse<CategoryDto>.Failure($"Ya existe otra categoría con el nombre '{request.Name}'");
             }
-            var description = Description.Create(request.Description);
 
             // Actualizar la categoría
-            category.UpdateDetails(name, description, request.IsActive);
+            category.UpdateDetails(name, request.IsActive);
 
             // Guardar cambios
             _unitOfWork.Categories.Update(category);

@@ -20,7 +20,7 @@ namespace Evaluacion.IA.Domain.ValueObjects
                 throw new ArgumentException("Description cannot exceed 1000 characters", nameof(value));
 
             var trimmedValue = value.Trim();
-            
+
             return new Description(trimmedValue.ToLower());
         }
 

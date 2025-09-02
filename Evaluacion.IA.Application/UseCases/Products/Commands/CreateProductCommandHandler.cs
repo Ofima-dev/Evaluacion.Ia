@@ -1,19 +1,22 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.Services;
 using Evaluacion.IA.Domain.Entities;
 using Evaluacion.IA.Domain.ValueObjects;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Commands;
 
 public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ApiResponse<ProductDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageStorageService _imageStorageService;
 
-    public CreateProductCommandHandler(IUnitOfWork unitOfWork)
+    public CreateProductCommandHandler(IUnitOfWork unitOfWork, IImageStorageService imageStorageService)
     {
         _unitOfWork = unitOfWork;
+        _imageStorageService = imageStorageService;
     }
 
     public async Task<ApiResponse<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -46,24 +49,22 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
                 return ApiResponse<ProductDto>.Failure("La moneda es requerida");
             }
 
-
             if (!request.CategoryId.HasValue || request.CategoryId.Value <= 0)
             {
                 return ApiResponse<ProductDto>.Failure("Debe seleccionar una categoría válida");
             }
 
             // Verificar que el SKU no exista
-            var existingProduct = await _unitOfWork.Products
-                .FirstOrDefaultAsync(p => p.Sku.Value == request.Sku);
+            var existingProduct = await _unitOfWork.Products.AnyAsync(p => p.Sku == request.Sku);
 
-            if (existingProduct is not null)
+            if (existingProduct)
             {
                 return ApiResponse<ProductDto>.Failure($"Ya existe un producto con el SKU '{request.Sku}'");
             }
 
             // Verificar que la categoría exista y esté activa
 
-            var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);
+            var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.HasValue ? request.CategoryId.Value : 0);
             if (category is null)
             {
                 return ApiResponse<ProductDto>.Failure($"No se encontró la categoría con ID {request.CategoryId}");
@@ -82,10 +83,18 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
 
             // Crear el producto
             var product = new Product(sku, name, description, price, request.CategoryId);
+
             product.SetCategory(category);
 
             // Guardar en base de datos
             await _unitOfWork.Products.AddAsync(product);
+            await _unitOfWork.SaveChangesAsync();
+
+            var urlImage = Url.Create(await _imageStorageService.SaveImageAsync(request.Image!));
+            var alt = Description.Create(request.Alt);
+            var productImage = new ProductImage(urlImage, alt, 1, product.Id);
+
+            await _unitOfWork.ProductImages.AddAsync(productImage);
             await _unitOfWork.SaveChangesAsync();
 
             // Crear DTO de respuesta
@@ -100,8 +109,7 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
                 category.Name.Value,
                 product.IsActive,
                 product.CreateAt,
-                product.UpdateAt,
-                new List<ProductImageDto>() // Nuevo producto no tiene imágenes inicialmente
+                await _imageStorageService.GetImageAsync(urlImage) // Nuevo producto no tiene imágenes inicialmente
             );
 
             return ApiResponse<ProductDto>.Success(productDto, "Producto creado exitosamente");

@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Queries;
 
@@ -26,7 +26,7 @@ public sealed class GetActiveCategoriesQueryHandler : IRequestHandler<GetActiveC
             foreach (var category in categories.OrderBy(c => c.Name.Value))
             {
                 var productCount = await _unitOfWork.Products.CountAsync(p => p.CategoryId == category.Id);
-                
+
                 categoryDtos.Add(new CategorySummaryDto(
                     category.Id,
                     category.Name.Value,

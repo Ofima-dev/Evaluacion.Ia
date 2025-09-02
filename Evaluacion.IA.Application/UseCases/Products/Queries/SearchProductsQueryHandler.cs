@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Queries;
 
@@ -46,7 +46,7 @@ public sealed class SearchProductsQueryHandler : IRequestHandler<SearchProductsQ
             }
 
             // Aplicar búsqueda en múltiples campos con ponderación
-            query = query.Where(p => 
+            query = query.Where(p =>
                 p.Name.Value.ToLower().Contains(searchTerm) ||
                 p.Description.Value.ToLower().Contains(searchTerm) ||
                 p.Sku.Value.ToLower().Contains(searchTerm));

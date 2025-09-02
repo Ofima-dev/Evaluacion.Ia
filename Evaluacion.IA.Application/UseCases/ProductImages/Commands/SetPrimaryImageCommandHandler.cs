@@ -1,6 +1,6 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 
@@ -30,24 +30,6 @@ public sealed class SetPrimaryImageCommandHandler : IRequestHandler<SetPrimaryIm
                 return ApiResponse<bool>.Failure($"No se encontró la imagen con ID {request.ImageId}");
             }
 
-            // Si ya es primaria, no hacer nada
-            if (productImage.IsPrimary)
-            {
-                return ApiResponse<bool>.Success(true, "La imagen ya es la primaria");
-            }
-
-            // Quitar la marca de primaria de las demás imágenes del producto
-            var existingPrimaryImages = await _unitOfWork.ProductImages
-                .FindAsync(pi => pi.ProductId == productImage.ProductId && pi.IsPrimary);
-
-            foreach (var img in existingPrimaryImages)
-            {
-                img.RemoveAsPrimary();
-                _unitOfWork.ProductImages.Update(img);
-            }
-
-            // Establecer esta imagen como primaria
-            productImage.SetAsPrimary();
             _unitOfWork.ProductImages.Update(productImage);
 
             // Guardar cambios

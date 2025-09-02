@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.UseCases.Roles.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.UseCases.Roles.DTOs;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Roles.Commands
 {
@@ -25,7 +25,7 @@ namespace Evaluacion.IA.Application.UseCases.Roles.Commands
                 }
 
                 // Validar que no exista otro rol con la misma descripción
-                var existingRole = await _unitOfWork.Roles.FirstOrDefaultAsync(r => 
+                var existingRole = await _unitOfWork.Roles.FirstOrDefaultAsync(r =>
                     r.Description.Value == request.Description && r.Id != request.Id);
                 if (existingRole != null)
                 {

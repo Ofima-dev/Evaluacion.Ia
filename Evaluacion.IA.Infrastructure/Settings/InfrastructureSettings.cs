@@ -1,11 +1,11 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
+using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.Services;
 using Evaluacion.IA.Infrastructure.Data;
 using Evaluacion.IA.Infrastructure.Repositories;
 using Evaluacion.IA.Infrastructure.Services;
-using Evaluacion.IA.Application.Interfaces;
-using Evaluacion.IA.Application.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Evaluacion.IA.Infrastructure.Settings
 {
@@ -21,7 +21,7 @@ namespace Evaluacion.IA.Infrastructure.Settings
         public class JwtOptions
         {
             public const string SectionName = "JwtSettings";
-            
+
             public string SecretKey { get; set; } = string.Empty;
             public string Issuer { get; set; } = string.Empty;
             public string Audience { get; set; } = string.Empty;
@@ -34,7 +34,7 @@ namespace Evaluacion.IA.Infrastructure.Settings
         public class DatabaseOptions
         {
             public const string SectionName = "ConnectionStrings";
-            
+
             public string DefaultConnection { get; set; } = string.Empty;
         }
 
@@ -44,7 +44,7 @@ namespace Evaluacion.IA.Infrastructure.Settings
         public class PasswordHashingOptions
         {
             public const string SectionName = "PasswordHashing";
-            
+
             public int SaltSize { get; set; } = 16;
             public int HashSize { get; set; } = 32;
             public int Iterations { get; set; } = 4;
@@ -100,7 +100,7 @@ namespace Evaluacion.IA.Infrastructure.Settings
         /// </summary>
         private static void ConfigureDatabase(IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("DefaultConnection") 
+            var connectionString = configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             // Configurar Entity Framework
@@ -113,15 +113,15 @@ namespace Evaluacion.IA.Infrastructure.Settings
                         maxRetryCount: 3,
                         maxRetryDelay: TimeSpan.FromSeconds(30),
                         errorNumbersToAdd: null);
-                    
+
                     sqlOptions.MigrationsAssembly(typeof(DatabaseContext).Assembly.FullName);
                 });
 
                 // Configuraciones adicionales en desarrollo
-                #if DEBUG
+#if DEBUG
                 options.EnableSensitiveDataLogging();
                 options.EnableDetailedErrors();
-                #endif
+#endif
             });
         }
 
@@ -148,6 +148,8 @@ namespace Evaluacion.IA.Infrastructure.Settings
         {
             // Servicio de hash de contraseñas
             services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IImageStorageService, ImageStorageService>();
+            
 
             // Servicio JWT
             services.AddScoped<IJWT>(provider =>
@@ -170,8 +172,8 @@ namespace Evaluacion.IA.Infrastructure.Settings
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            
-            try 
+
+            try
             {
                 await context.Database.MigrateAsync();
             }
@@ -191,7 +193,7 @@ namespace Evaluacion.IA.Infrastructure.Settings
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-            
+
             try
             {
                 // Verificar si ya existen datos

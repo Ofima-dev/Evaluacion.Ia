@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore.Storage;
 using Evaluacion.IA.Application.Interfaces;
 using Evaluacion.IA.Domain.Entities;
 using Evaluacion.IA.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Evaluacion.IA.Infrastructure.Repositories
 {

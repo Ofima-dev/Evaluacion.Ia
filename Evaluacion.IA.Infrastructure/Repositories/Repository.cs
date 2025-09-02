@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using Evaluacion.IA.Application.Interfaces;
 using Evaluacion.IA.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Evaluacion.IA.Infrastructure.Repositories
 {
@@ -43,8 +43,8 @@ namespace Evaluacion.IA.Infrastructure.Repositories
 
         public async Task<int> CountAsync(Expression<Func<T, bool>>? expression = null)
         {
-            return expression == null 
-                ? await _dbSet.CountAsync() 
+            return expression == null
+                ? await _dbSet.CountAsync()
                 : await _dbSet.CountAsync(expression);
         }
 

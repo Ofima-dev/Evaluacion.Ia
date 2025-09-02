@@ -1,10 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+using Evaluacion.IA.Application.Common;
+using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.UseCases.Categories.Commands;
 using Evaluacion.IA.Application.UseCases.Categories.Queries;
-using Evaluacion.IA.Application.DTOs;
-using Evaluacion.IA.Application.Common;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Evaluacion.IA.API.Controllers;
 
@@ -129,7 +129,6 @@ public class CategoriesController : ControllerBase
         var command = new UpdateCategoryCommand(
             updateCategoryDto.Id,
             updateCategoryDto.Name,
-            updateCategoryDto.Description,
             updateCategoryDto.IsActive
         );
 

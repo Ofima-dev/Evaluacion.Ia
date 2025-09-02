@@ -1,6 +1,6 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.UseCases.Users.DTOs;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Users.Commands
 {

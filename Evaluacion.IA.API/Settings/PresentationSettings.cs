@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -24,7 +23,7 @@ namespace Evaluacion.IA.API.Settings
         public class JwtAuthenticationOptions
         {
             public const string SectionName = "JwtSettings";
-            
+
             public string SecretKey { get; set; } = string.Empty;
             public string Issuer { get; set; } = string.Empty;
             public string Audience { get; set; } = string.Empty;
@@ -41,7 +40,7 @@ namespace Evaluacion.IA.API.Settings
         public class CorsOptions
         {
             public const string SectionName = "Cors";
-            
+
             public string[] AllowedOrigins { get; set; } = Array.Empty<string>();
             public string[] AllowedMethods { get; set; } = { "GET", "POST", "PUT", "DELETE", "OPTIONS" };
             public string[] AllowedHeaders { get; set; } = { "*" };
@@ -55,7 +54,7 @@ namespace Evaluacion.IA.API.Settings
         public class SwaggerOptions
         {
             public const string SectionName = "Swagger";
-            
+
             public bool Enabled { get; set; } = true;
             public string Title { get; set; } = "Evaluación IA API";
             public string Version { get; set; } = "v1";
@@ -72,7 +71,7 @@ namespace Evaluacion.IA.API.Settings
         public class ControllerOptions
         {
             public const string SectionName = "Controllers";
-            
+
             public bool EnableModelValidation { get; set; } = true;
             public bool SuppressAsyncSuffixInActionNames { get; set; } = true;
             public bool EnableEndpointRouting { get; set; } = true;
@@ -85,7 +84,7 @@ namespace Evaluacion.IA.API.Settings
         public class JsonOptions
         {
             public const string SectionName = "Json";
-            
+
             public bool PropertyNameCaseInsensitive { get; set; } = true;
             public JsonNamingPolicy PropertyNamingPolicy { get; set; } = JsonNamingPolicy.CamelCase;
             public bool IncludeFields { get; set; } = true;
@@ -99,7 +98,7 @@ namespace Evaluacion.IA.API.Settings
         public class RateLimitOptions
         {
             public const string SectionName = "RateLimit";
-            
+
             public bool Enabled { get; set; } = true;
             public int RequestsPerMinute { get; set; } = 60;
             public int RequestsPerHour { get; set; } = 1000;
@@ -170,7 +169,7 @@ namespace Evaluacion.IA.API.Settings
         private static void ConfigureControllers(IServiceCollection services, IConfiguration configuration)
         {
             var jsonOptions = configuration.GetSection(JsonOptions.SectionName);
-            
+
             services.AddControllers(options =>
             {
                 // Configuración de model binding
@@ -189,13 +188,13 @@ namespace Evaluacion.IA.API.Settings
             .AddJsonOptions(options =>
             {
                 // Configuración de serialización JSON
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = 
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive =
                     jsonOptions.GetValue<bool>("PropertyNameCaseInsensitive", true);
-                
+
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                options.JsonSerializerOptions.WriteIndented = 
+                options.JsonSerializerOptions.WriteIndented =
                     jsonOptions.GetValue<bool>("WriteIndented", false);
-                
+
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
 
@@ -257,20 +256,20 @@ namespace Evaluacion.IA.API.Settings
                     .Build();
 
                 // Políticas específicas por rol
-                options.AddPolicy("AdminOnly", policy => 
+                options.AddPolicy("AdminOnly", policy =>
                     policy.RequireRole("Administrator"));
 
-                options.AddPolicy("UserOnly", policy => 
+                options.AddPolicy("UserOnly", policy =>
                     policy.RequireRole("User"));
 
-                options.AddPolicy("AdminOrUser", policy => 
+                options.AddPolicy("AdminOrUser", policy =>
                     policy.RequireRole("Administrator", "User"));
 
                 // Políticas basadas en claims
-                options.AddPolicy("CanManageUsers", policy => 
+                options.AddPolicy("CanManageUsers", policy =>
                     policy.RequireClaim("Permission", "ManageUsers"));
 
-                options.AddPolicy("CanManageProducts", policy => 
+                options.AddPolicy("CanManageProducts", policy =>
                     policy.RequireClaim("Permission", "ManageProducts"));
             });
         }
@@ -298,7 +297,7 @@ namespace Evaluacion.IA.API.Settings
             //    options.AddPolicy(policyName, builder =>
             //    {
             //        var allowedOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>();
-                    
+
             //        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
 
             //        if (corsSettings.GetValue<bool>("AllowCredentials", true) && 
@@ -316,7 +315,7 @@ namespace Evaluacion.IA.API.Settings
         private static void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
         {
             var swaggerSettings = configuration.GetSection(SwaggerOptions.SectionName);
-            
+
             if (!swaggerSettings.GetValue<bool>("Enabled", true))
                 return;
 
@@ -367,7 +366,7 @@ namespace Evaluacion.IA.API.Settings
                 {
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    
+
                     if (File.Exists(xmlPath))
                     {
                         options.IncludeXmlComments(xmlPath);
@@ -382,7 +381,7 @@ namespace Evaluacion.IA.API.Settings
         private static void ConfigureRateLimit(IServiceCollection services, IConfiguration configuration)
         {
             var rateLimitSettings = configuration.GetSection(RateLimitOptions.SectionName);
-            
+
             if (!rateLimitSettings.GetValue<bool>("Enabled", false))
                 return;
 
@@ -399,7 +398,7 @@ namespace Evaluacion.IA.API.Settings
         /// <param name="configuration">Configuración</param>
         /// <returns>Application builder actualizado</returns>
         public static WebApplication ConfigurePresentationPipeline(
-            this WebApplication app, 
+            this WebApplication app,
             IConfiguration configuration)
         {
             var environment = app.Environment;
@@ -440,13 +439,13 @@ namespace Evaluacion.IA.API.Settings
         private static void ConfigureSwaggerPipeline(WebApplication app, IConfiguration configuration)
         {
             var swaggerSettings = configuration.GetSection(SwaggerOptions.SectionName);
-            
+
             if (swaggerSettings.GetValue<bool>("Enabled", true))
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/v1/swagger.json", 
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json",
                         swaggerSettings.GetValue<string>("Title", "Evaluación IA API"));
                     options.RoutePrefix = "swagger";
                     options.DisplayRequestDuration();
@@ -467,7 +466,7 @@ namespace Evaluacion.IA.API.Settings
             {
                 var secretKey = jwtSection["SecretKey"];
                 var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-                
+
                 if (environment?.Equals("Production", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     if (string.IsNullOrEmpty(secretKey) || secretKey.Contains("default"))
@@ -490,7 +489,7 @@ namespace Evaluacion.IA.API.Settings
             {
                 var allowCredentials = corsSection.GetValue<bool>("AllowCredentials", false);
                 var allowedOrigins = corsSection.GetSection("AllowedOrigins").Get<string[]>();
-                
+
                 if (allowCredentials && (allowedOrigins == null || allowedOrigins.Length == 0))
                 {
                     throw new InvalidOperationException(
@@ -541,7 +540,7 @@ namespace Evaluacion.IA.API.Settings
                     .GetTypes()
                     .Where(t => t.IsSubclassOf(typeof(ControllerBase)) && !t.IsAbstract)
                     .ToArray();
-                
+
                 return controllerTypes.Length;
             }
             catch
@@ -560,14 +559,14 @@ namespace Evaluacion.IA.API.Settings
         {
             if (!context.ModelState.IsValid)
             {
-            var errors = context.ModelState
-                .Where(x => x.Value != null)
-                .SelectMany(x => x.Value!.Errors.Select(e => new { Field = x.Key, Message = e.ErrorMessage }))
-                .ToArray();                var response = new
-                {
-                    Message = "Validation failed",
-                    Errors = errors
-                };
+                var errors = context.ModelState
+                    .Where(x => x.Value != null)
+                    .SelectMany(x => x.Value!.Errors.Select(e => new { Field = x.Key, Message = e.ErrorMessage }))
+                    .ToArray(); var response = new
+                    {
+                        Message = "Validation failed",
+                        Errors = errors
+                    };
 
                 context.Result = new BadRequestObjectResult(response);
             }

@@ -1,8 +1,8 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
 using Evaluacion.IA.Domain.ValueObjects;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 
@@ -47,19 +47,6 @@ public sealed class UpdateProductImageCommandHandler : IRequestHandler<UpdatePro
                 return ApiResponse<ProductImageDto>.Failure($"No se encontró la imagen con ID {request.Id}");
             }
 
-            // Si se marca como primaria, quitar la marca de las demás imágenes del producto
-            if (request.IsPrimary && !productImage.IsPrimary)
-            {
-                var existingPrimaryImages = await _unitOfWork.ProductImages
-                    .FindAsync(pi => pi.ProductId == productImage.ProductId && pi.IsPrimary && pi.Id != request.Id);
-
-                foreach (var img in existingPrimaryImages)
-                {
-                    img.RemoveAsPrimary();
-                    _unitOfWork.ProductImages.Update(img);
-                }
-            }
-
             // Verificar que no exista otra imagen con el mismo orden para el mismo producto
             if (request.Order != productImage.Order)
             {
@@ -77,7 +64,7 @@ public sealed class UpdateProductImageCommandHandler : IRequestHandler<UpdatePro
             var alt = Description.Create(request.Alt);
 
             // Actualizar la imagen
-            productImage.UpdateDetails(imageUrl, alt, request.Order, request.IsPrimary);
+            productImage.UpdateDetails(imageUrl, alt, request.Order);
 
             // Guardar cambios
             _unitOfWork.ProductImages.Update(productImage);
@@ -88,8 +75,7 @@ public sealed class UpdateProductImageCommandHandler : IRequestHandler<UpdatePro
                 productImage.Id,
                 productImage.ImageUrl.Value,
                 productImage.Alt.Value,
-                productImage.Order,
-                productImage.IsPrimary
+                productImage.Order
             );
 
             return ApiResponse<ProductImageDto>.Success(imageDto, "Imagen actualizada exitosamente");

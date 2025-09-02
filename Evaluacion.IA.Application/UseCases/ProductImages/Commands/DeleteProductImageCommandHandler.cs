@@ -1,6 +1,6 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 
@@ -28,20 +28,6 @@ public sealed class DeleteProductImageCommandHandler : IRequestHandler<DeletePro
             if (productImage is null)
             {
                 return ApiResponse<bool>.Failure($"No se encontró la imagen con ID {request.Id}");
-            }
-
-            // Si era la imagen primaria, asignar otra como primaria si existe
-            if (productImage.IsPrimary)
-            {
-                var otherImages = await _unitOfWork.ProductImages
-                    .FindAsync(pi => pi.ProductId == productImage.ProductId && pi.Id != request.Id);
-
-                var firstOtherImage = otherImages.OrderBy(pi => pi.Order).FirstOrDefault();
-                if (firstOtherImage is not null)
-                {
-                    firstOtherImage.SetAsPrimary();
-                    _unitOfWork.ProductImages.Update(firstOtherImage);
-                }
             }
 
             // Eliminar la imagen

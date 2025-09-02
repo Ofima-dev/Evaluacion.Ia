@@ -1,7 +1,7 @@
-using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.ProductImages.Queries;
 
@@ -34,12 +34,6 @@ public sealed class GetProductImagesQueryHandler : IRequestHandler<GetProductIma
             // Obtener las imágenes del producto
             var images = await _unitOfWork.ProductImages.FindAsync(pi => pi.ProductId == request.ProductId);
 
-            // Filtrar solo la primaria si se solicita
-            if (request.OnlyPrimary)
-            {
-                images = images.Where(pi => pi.IsPrimary);
-            }
-
             // Crear DTOs ordenados
             var imageDtos = images
                 .OrderBy(pi => pi.Order)
@@ -48,8 +42,7 @@ public sealed class GetProductImagesQueryHandler : IRequestHandler<GetProductIma
                     pi.Id,
                     pi.ImageUrl.Value,
                     pi.Alt.Value,
-                    pi.Order,
-                    pi.IsPrimary
+                    pi.Order
                 ))
                 .ToList();
 
