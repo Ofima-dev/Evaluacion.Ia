@@ -38,11 +38,9 @@ public sealed class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByI
             var categoryDto = new CategoryDto(
                 category.Id,
                 category.Name.Value,
-                category.Description.Value,
                 category.IsActive,
                 productCount,
-                category.CreateAt,
-                category.UpdateAt
+                category.CreateAt
             );
 
             return ApiResponse<CategoryDto>.Success(categoryDto);

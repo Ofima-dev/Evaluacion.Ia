@@ -21,14 +21,14 @@ namespace Evaluacion.IA.Application.UseCases.Roles.Commands
             try
             {
                 // Validar que no exista un rol con la misma descripción
-                var existingRole = await _unitOfWork.Roles.FirstOrDefaultAsync(r => r.Description.Value == request.Description);
-                if (existingRole != null)
+                var description = Description.Create(request.Description);
+                var existingRole = await _unitOfWork.Roles.AnyAsync(r => r.Description == description);
+                if (existingRole)
                 {
                     return ApiResponse<RoleDto>.Failure("Ya existe un rol con esta descripción");
                 }
 
                 // Crear el rol
-                var description = Description.Create(request.Description);
                 var role = new Role(description);
 
                 await _unitOfWork.Roles.AddAsync(role);

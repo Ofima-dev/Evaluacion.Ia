@@ -6,5 +6,5 @@ namespace Evaluacion.IA.Application.UseCases.Categories.Commands;
 
 public sealed record CreateCategoryCommand(
     string Name,
-    string Description
+    int? CategoryId = null
 ) : IRequest<ApiResponse<CategoryDto>>;

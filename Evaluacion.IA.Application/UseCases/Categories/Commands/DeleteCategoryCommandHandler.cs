@@ -1,7 +1,6 @@
 using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.Interfaces;
-using Evaluacion.IA.Domain.Entities;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Commands;
 

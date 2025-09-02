@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using MediatR;
 using Evaluacion.IA.Infrastructure.Data;
 using Evaluacion.IA.Infrastructure.Repositories;
 using Evaluacion.IA.Infrastructure.Services;
@@ -136,6 +135,10 @@ namespace Evaluacion.IA.Infrastructure.Settings
 
             // Registrar Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            //services.AddScoped<IJWT, JWT>();
+
+            //services.AddScoped<IPasswordHasher, PasswordHasher>();
         }
 
         /// <summary>

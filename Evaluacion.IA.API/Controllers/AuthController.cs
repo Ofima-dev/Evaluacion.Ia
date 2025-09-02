@@ -3,7 +3,6 @@ using MediatR;
 using Evaluacion.IA.Application.UseCases.Users.Commands;
 using Evaluacion.IA.Application.UseCases.Users.DTOs;
 using Evaluacion.IA.Application.UseCases.Auth.Commands;
-using Evaluacion.IA.Application.UseCases.Auth.DTOs;
 using Evaluacion.IA.Application.Common;
 
 namespace Evaluacion.IA.API.Controllers;

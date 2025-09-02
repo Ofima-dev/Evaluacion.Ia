@@ -8,7 +8,7 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            builder.ToTable("Categories");
+            builder.ToTable("category");
 
             builder.HasKey(c => c.Id);
 
@@ -16,27 +16,20 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
                 .ValueGeneratedOnAdd();
 
 
-            builder.Property(c => c.Name)
+            builder.Property(c => c.Name).HasColumnName("name")
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasConversion(
                     name => name.Value,
                     value => Evaluacion.IA.Domain.ValueObjects.Name.Create(value));
 
-            builder.Property(c => c.Description)
-                .IsRequired()
-                .HasMaxLength(255)
-                .HasConversion(
-                    description => description.Value,
-                    value => Evaluacion.IA.Domain.ValueObjects.Description.Create(value));
-
-            builder.Property(c => c.ParentCategoryId)
+            builder.Property(c => c.ParentCategoryId).HasColumnName("parent_category_id")
                 .IsRequired(false);
 
-            builder.Property(c => c.IsActive)
+            builder.Property(c => c.IsActive).HasColumnName("is_active")
                 .IsRequired();
 
-            builder.Property(c => c.CreateAt)
+            builder.Property(c => c.CreateAt).HasColumnName("created_at")
                 .IsRequired()
                 .HasDefaultValueSql("SYSUTCDATETIME()");
 

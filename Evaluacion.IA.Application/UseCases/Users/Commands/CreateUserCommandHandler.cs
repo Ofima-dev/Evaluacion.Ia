@@ -24,8 +24,9 @@ namespace Evaluacion.IA.Application.UseCases.Users.Commands
             try
             {
                 // Validar que el email no exista
-                var existingUser = await _unitOfWork.Users.FirstOrDefaultAsync(u => u.Email.Value == request.Email);
-                if (existingUser != null)
+                var email = Email.Create(request.Email);
+                var existingUser = await _unitOfWork.Users.AnyAsync(u => u.Email == email);
+                if (existingUser)
                 {
                     return ApiResponse<UserDto>.Failure("El email ya está registrado");
                 }
@@ -38,9 +39,7 @@ namespace Evaluacion.IA.Application.UseCases.Users.Commands
                 }
 
                 // Crear el usuario
-                var email = Email.Create(request.Email);
                 var passwordHash = _passwordHasher.HashPassword(request.Password);
-                
                 var user = new User(email, passwordHash, request.RoleId);
                 user.SetRole(role);
 

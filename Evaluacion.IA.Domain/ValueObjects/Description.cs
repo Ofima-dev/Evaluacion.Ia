@@ -21,7 +21,7 @@ namespace Evaluacion.IA.Domain.ValueObjects
 
             var trimmedValue = value.Trim();
             
-            return new Description(trimmedValue);
+            return new Description(trimmedValue.ToLower());
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

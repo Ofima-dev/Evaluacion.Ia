@@ -8,6 +8,5 @@ public sealed record AddProductImageCommand(
     int ProductId,
     string ImageUrl,
     string Alt,
-    int Order,
-    bool IsPrimary = false
+    int Order
 ) : IRequest<ApiResponse<ProductImageDto>>;

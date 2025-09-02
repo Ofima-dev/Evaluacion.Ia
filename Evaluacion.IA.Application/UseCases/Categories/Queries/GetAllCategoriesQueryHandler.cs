@@ -41,8 +41,7 @@ public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategor
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
                 var searchTerm = request.SearchTerm.Trim().ToLower();
-                query = query.Where(c => c.Name.Value.ToLower().Contains(searchTerm) ||
-                                       c.Description.Value.ToLower().Contains(searchTerm));
+                query = query.Where(c => c.Name.Value.ToLower().Contains(searchTerm));
             }
 
             // Obtener total de registros
@@ -50,7 +49,7 @@ public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategor
 
             // Aplicar paginación y ordenamiento
             var categories = await _unitOfWork.Categories.GetPagedAsync(
-                query.OrderBy(c => c.Name.Value),
+                query.OrderBy(c => c.Name),
                 request.Page,
                 request.PageSize
             );
@@ -62,17 +61,16 @@ public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategor
                 var productCount = 0;
                 if (request.IncludeProductCount)
                 {
-                    productCount = await _unitOfWork.Products.CountAsync(p => p.CategoryId == category.Id);
+                    var id = int.Parse(category.Id.ToString());
+                    productCount = await _unitOfWork.Products.CountAsync(p => p.CategoryId == id);
                 }
 
                 categoryDtos.Add(new CategoryDto(
                     category.Id,
                     category.Name.Value,
-                    category.Description.Value,
                     category.IsActive,
                     productCount,
-                    category.CreateAt,
-                    category.UpdateAt
+                    category.CreateAt
                 ));
             }
 

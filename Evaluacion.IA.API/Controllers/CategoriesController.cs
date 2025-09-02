@@ -28,10 +28,9 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(ApiResponse<PagedResult<CategoryDto>>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<ApiResponse<PagedResult<CategoryDto>>>> GetAllCategories()
+    public async Task<ActionResult<ApiResponse<PagedResult<CategoryDto>>>> GetAllCategories([FromQuery] GetAllCategoriesQuery getAllCategories)
     {
-        var query = new GetAllCategoriesQuery();
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(getAllCategories);
 
         if (result.IsSuccess)
         {
@@ -96,7 +95,7 @@ public class CategoriesController : ControllerBase
     {
         var command = new CreateCategoryCommand(
             createCategoryDto.Name,
-            createCategoryDto.Description
+            createCategoryDto.CategoryId
         );
 
         var result = await _mediator.Send(command);

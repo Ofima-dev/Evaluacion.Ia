@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -282,32 +282,32 @@ namespace Evaluacion.IA.API.Settings
         {
             var corsSettings = configuration.GetSection(CorsOptions.SectionName);
             var policyName = corsSettings.GetValue<string>("PolicyName", "DefaultCorsPolicy");
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy(policyName, builder =>
                 {
-                    var allowedOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>();
-                    
-                    if (allowedOrigins != null && allowedOrigins.Length > 0)
-                    {
-                        builder.WithOrigins(allowedOrigins);
-                    }
-                    else
-                    {
-                        builder.AllowAnyOrigin();
-                    }
-
-                    builder.AllowAnyMethod()
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
                            .AllowAnyHeader();
-
-                    if (corsSettings.GetValue<bool>("AllowCredentials", true) && 
-                        (allowedOrigins != null && allowedOrigins.Length > 0))
-                    {
-                        builder.AllowCredentials();
-                    }
                 });
             });
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(policyName, builder =>
+            //    {
+            //        var allowedOrigins = corsSettings.GetSection("AllowedOrigins").Get<string[]>();
+                    
+            //        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
+            //        if (corsSettings.GetValue<bool>("AllowCredentials", true) && 
+            //            (allowedOrigins != null && allowedOrigins.Length > 0))
+            //        {
+            //            builder.AllowCredentials();
+            //        }
+            //    });
+            //});
         }
 
         /// <summary>

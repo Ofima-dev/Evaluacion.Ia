@@ -42,28 +42,13 @@ public sealed class AddProductImageCommandHandler : IRequestHandler<AddProductIm
             }
 
             // Verificar que el producto exista
-            var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId);
-            if (product is null)
+            if (await _unitOfWork.Products.FirstOrDefaultAsync(p => p.Id == request.ProductId) is not Product product)
             {
                 return ApiResponse<ProductImageDto>.Failure($"No se encontró el producto con ID {request.ProductId}");
             }
 
-            // Si se marca como primaria, quitar la marca de las demás imágenes del producto
-            if (request.IsPrimary)
-            {
-                var existingImages = await _unitOfWork.ProductImages
-                    .FindAsync(pi => pi.ProductId == request.ProductId && pi.IsPrimary);
-
-                foreach (var img in existingImages)
-                {
-                    img.RemoveAsPrimary();
-                    _unitOfWork.ProductImages.Update(img);
-                }
-            }
-
             // Verificar que no exista otra imagen con el mismo orden para el mismo producto
-            var imageWithSameOrder = await _unitOfWork.ProductImages
-                .FirstOrDefaultAsync(pi => pi.ProductId == request.ProductId && pi.Order == request.Order);
+            var imageWithSameOrder = await _unitOfWork.ProductImages.FirstOrDefaultAsync(pi => pi.ProductId == request.ProductId && pi.Order == request.Order);
 
             if (imageWithSameOrder is not null)
             {
@@ -75,7 +60,7 @@ public sealed class AddProductImageCommandHandler : IRequestHandler<AddProductIm
             var alt = Description.Create(request.Alt);
 
             // Crear la imagen del producto
-            var productImage = new ProductImage(imageUrl, alt, request.Order, request.ProductId, request.IsPrimary);
+            var productImage = new ProductImage(imageUrl, alt, request.Order, request.ProductId);
             productImage.SetProduct(product);
 
             // Guardar en base de datos
@@ -87,8 +72,7 @@ public sealed class AddProductImageCommandHandler : IRequestHandler<AddProductIm
                 productImage.Id,
                 productImage.ImageUrl.Value,
                 productImage.Alt.Value,
-                productImage.Order,
-                productImage.IsPrimary
+                productImage.Order
             );
 
             return ApiResponse<ProductImageDto>.Success(imageDto, "Imagen agregada exitosamente al producto");

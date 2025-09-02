@@ -15,7 +15,7 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
             builder.Property(u => u.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(u => u.Email)
+            builder.Property(u => u.Email).HasColumnName("email")
                 .IsRequired()
                 .HasMaxLength(150)
                 .HasConversion(
@@ -25,14 +25,14 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
             builder.HasIndex(u => u.Email)
                 .IsUnique();
 
-            builder.Property(u => u.PasswordHash)
+            builder.Property(u => u.PasswordHash).HasColumnName("password_hash")
                 .IsRequired()
                 .HasMaxLength(255);
 
-            builder.Property(u => u.RoleId)
+            builder.Property(u => u.RoleId).HasColumnName("role_id")
                 .IsRequired();
 
-            builder.Property(u => u.CreateAt)
+            builder.Property(u => u.CreateAt).HasColumnName("created_at")
                 .IsRequired()
                 .HasDefaultValueSql("SYSUTCDATETIME()");
 

@@ -3,16 +3,14 @@ namespace Evaluacion.IA.Application.DTOs;
 public sealed record CategoryDto(
     int Id,
     string Name,
-    string Description,
     bool IsActive,
     int ProductCount,
-    DateTime CreatedAt,
-    DateTime? UpdatedAt
+    DateTime CreatedAt
 );
 
 public sealed record CreateCategoryDto(
     string Name,
-    string Description
+    int? CategoryId = null
 );
 
 public sealed record UpdateCategoryDto(

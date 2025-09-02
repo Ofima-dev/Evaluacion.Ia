@@ -48,6 +48,5 @@ public sealed record ProductImageDto(
     int Id,
     string Url,
     string Alt,
-    int Order,
-    bool IsPrimary
+    int Order
 );

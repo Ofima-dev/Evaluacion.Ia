@@ -26,26 +26,17 @@ public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategor
                 return ApiResponse<CategoryDto>.Failure("El nombre de la categoría es requerido");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Description))
-            {
-                return ApiResponse<CategoryDto>.Failure("La descripción de la categoría es requerida");
-            }
-
             // Verificar si ya existe una categoría con el mismo nombre
-            var existingCategory = await _unitOfWork.Categories
-                .FirstOrDefaultAsync(c => c.Name.Value == request.Name);
+            var nameCategory = Name.Create(request.Name);
+            var existingCategory = await _unitOfWork.Categories.AnyAsync(c => c.Name == nameCategory);
 
-            if (existingCategory is not null)
+            if (existingCategory)
             {
                 return ApiResponse<CategoryDto>.Failure($"Ya existe una categoría con el nombre '{request.Name}'");
             }
 
-            // Crear Value Objects
-            var name = Name.Create(request.Name);
-            var description = Description.Create(request.Description);
-
             // Crear la entidad Category
-            var category = new Category(name, description);
+            var category = new Category(nameCategory, true, request.CategoryId.HasValue ? request.CategoryId : null);
 
             // Guardar en base de datos
             await _unitOfWork.Categories.AddAsync(category);
@@ -55,11 +46,9 @@ public sealed class CreateCategoryCommandHandler : IRequestHandler<CreateCategor
             var categoryDto = new CategoryDto(
                 category.Id,
                 category.Name.Value,
-                category.Description.Value,
                 category.IsActive,
                 0, // Nueva categoría no tiene productos
-                category.CreateAt,
-                category.UpdateAt
+                category.CreateAt
             );
 
             return ApiResponse<CategoryDto>.Success(categoryDto, "Categoría creada exitosamente");

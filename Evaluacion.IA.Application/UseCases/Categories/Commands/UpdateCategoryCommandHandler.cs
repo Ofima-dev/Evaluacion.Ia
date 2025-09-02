@@ -2,7 +2,6 @@ using MediatR;
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
-using Evaluacion.IA.Domain.Entities;
 using Evaluacion.IA.Domain.ValueObjects;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Commands;
@@ -44,16 +43,13 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
             }
 
             // Verificar si el nombre ya existe en otra categoría
-            var existingCategory = await _unitOfWork.Categories
-                .FirstOrDefaultAsync(c => c.Name.Value == request.Name && c.Id != request.Id);
+            var name = Name.Create(request.Name);
+            var existingCategory = await _unitOfWork.Categories.FirstOrDefaultAsync(c => c.Name == name  && c.Id != request.Id);
 
             if (existingCategory is not null)
             {
                 return ApiResponse<CategoryDto>.Failure($"Ya existe otra categoría con el nombre '{request.Name}'");
             }
-
-            // Crear Value Objects
-            var name = Name.Create(request.Name);
             var description = Description.Create(request.Description);
 
             // Actualizar la categoría
@@ -70,11 +66,9 @@ public sealed class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategor
             var categoryDto = new CategoryDto(
                 category.Id,
                 category.Name.Value,
-                category.Description.Value,
                 category.IsActive,
                 productCount,
-                category.CreateAt,
-                category.UpdateAt
+                category.CreateAt
             );
 
             return ApiResponse<CategoryDto>.Success(categoryDto, "Categoría actualizada exitosamente");
