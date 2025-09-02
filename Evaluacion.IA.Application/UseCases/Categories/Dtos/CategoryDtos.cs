@@ -1,4 +1,4 @@
-namespace Evaluacion.IA.Application.DTOs;
+namespace Evaluacion.IA.Application.UseCases.Categories.Dtos;
 
 public sealed record CategoryDto(
     int Id,

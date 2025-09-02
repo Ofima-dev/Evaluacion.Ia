@@ -1,7 +1,6 @@
 using Evaluacion.IA.Application.Common;
 using Evaluacion.IA.Application.Interfaces;
 using Evaluacion.IA.Application.Services;
-using Evaluacion.IA.Application.UseCases.Auth.DTOs;
 using Evaluacion.IA.Domain.ValueObjects;
 using MediatR;
 

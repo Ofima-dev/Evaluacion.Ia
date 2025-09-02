@@ -1,6 +1,6 @@
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.UseCases.Categories.Commands;
+using Evaluacion.IA.Application.UseCases.Categories.Dtos;
 using Evaluacion.IA.Application.UseCases.Categories.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

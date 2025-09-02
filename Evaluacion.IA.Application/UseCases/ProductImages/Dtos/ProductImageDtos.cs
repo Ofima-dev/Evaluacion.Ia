@@ -1,4 +1,4 @@
-namespace Evaluacion.IA.Application.DTOs;
+namespace Evaluacion.IA.Application.UseCases.ProductImages.Dtos;
 
 public sealed record CreateProductImageDto(
     int ProductId,

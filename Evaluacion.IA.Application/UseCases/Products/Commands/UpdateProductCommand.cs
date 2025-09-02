@@ -1,5 +1,5 @@
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.DTOs;
+using Evaluacion.IA.Application.UseCases.Products.Dtos;
 using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Products.Commands;

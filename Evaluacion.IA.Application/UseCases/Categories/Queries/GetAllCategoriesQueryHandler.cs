@@ -1,6 +1,7 @@
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.Interfaces;
+using Evaluacion.IA.Application.UseCases.Categories.Dtos;
+using Evaluacion.IA.Domain.ValueObjects;
 using MediatR;
 
 namespace Evaluacion.IA.Application.UseCases.Categories.Queries;
@@ -40,8 +41,8 @@ public sealed class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategor
 
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
-                var searchTerm = request.SearchTerm.Trim().ToLower();
-                query = query.Where(c => c.Name.Value.ToLower().Contains(searchTerm));
+                var searchTerm = Name.Create(request.SearchTerm.Trim().ToLower());
+                query = query.Where(c => c.Name == searchTerm);
             }
 
             // Obtener total de registros

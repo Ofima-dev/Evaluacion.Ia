@@ -1,4 +1,4 @@
-namespace Evaluacion.IA.Application.UseCases.Auth.DTOs
+namespace Evaluacion.IA.Application.UseCases.Auth
 {
     public class LoginResponseDto
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace Evaluacion.IA.Application.DTOs;
+namespace Evaluacion.IA.Application.UseCases.Products.Dtos;
 
 public sealed record ProductDto(
     int Id,

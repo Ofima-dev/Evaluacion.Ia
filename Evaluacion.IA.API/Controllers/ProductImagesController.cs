@@ -1,7 +1,7 @@
 using Evaluacion.IA.Application.Common;
-using Evaluacion.IA.Application.DTOs;
 using Evaluacion.IA.Application.UseCases.ProductImages.Commands;
 using Evaluacion.IA.Application.UseCases.ProductImages.Queries;
+using Evaluacion.IA.Application.UseCases.Products.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
