@@ -10,5 +10,5 @@ public sealed record CreateProductCommand(
     string Description,
     decimal Price,
     string Currency,
-    int CategoryId
+    int? CategoryId
 ) : IRequest<ApiResponse<ProductDto>>;

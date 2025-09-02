@@ -90,7 +90,7 @@ public sealed class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQ
                 product.Name.Value,
                 product.Price.Amount,
                 product.Price.Currency,
-                categoryLookup.GetValueOrDefault(product.CategoryId, "Sin categoría"),
+                categoryLookup.GetValueOrDefault(product.CategoryId ?? 0, "Sin categoría"),
                 product.IsActive
             )).ToList();
 

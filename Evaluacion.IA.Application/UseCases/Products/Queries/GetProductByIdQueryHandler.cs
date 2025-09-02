@@ -32,8 +32,15 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
             }
 
             // Obtener la categoría
-            var category = await _unitOfWork.Categories.GetByIdAsync(product.CategoryId);
-            var categoryName = category?.Name.Value ?? "Sin categoría";
+            string categoryName = "Sin categoría";
+            if (product.CategoryId.HasValue && product.CategoryId.Value > 0)
+            {
+                var category = await _unitOfWork.Categories.GetByIdAsync(product.CategoryId.Value);
+                if (category != null)
+                {
+                    categoryName = category.Name.Value;
+                }
+            }
 
             // Obtener las imágenes del producto
             var productImages = await _unitOfWork.ProductImages
@@ -55,7 +62,7 @@ public sealed class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQ
                 product.Description.Value,
                 product.Price.Amount,
                 product.Price.Currency,
-                product.CategoryId,
+                product.CategoryId ?? 0,
                 categoryName,
                 product.IsActive,
                 product.CreateAt,

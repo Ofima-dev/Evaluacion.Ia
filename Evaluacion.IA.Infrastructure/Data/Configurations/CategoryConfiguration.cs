@@ -15,12 +15,20 @@ namespace Evaluacion.IA.Infrastructure.Data.Configurations
             builder.Property(c => c.Id)
                 .ValueGeneratedOnAdd();
 
+
             builder.Property(c => c.Name)
                 .IsRequired()
                 .HasMaxLength(100)
                 .HasConversion(
                     name => name.Value,
                     value => Evaluacion.IA.Domain.ValueObjects.Name.Create(value));
+
+            builder.Property(c => c.Description)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasConversion(
+                    description => description.Value,
+                    value => Evaluacion.IA.Domain.ValueObjects.Description.Create(value));
 
             builder.Property(c => c.ParentCategoryId)
                 .IsRequired(false);

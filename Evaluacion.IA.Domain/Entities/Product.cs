@@ -9,7 +9,7 @@ namespace Evaluacion.IA.Domain.Entities
         public Name Name { get; private set; }
         public Description Description { get; private set; }
         public Money Price { get; private set; }
-        public int CategoryId { get; private set; }
+    public int? CategoryId { get; private set; }
         public Category? Category { get; private set; }
         public bool IsActive { get; private set; }
         public DateTime CreateAt { get; private set; }
@@ -24,7 +24,8 @@ namespace Evaluacion.IA.Domain.Entities
             Price = Money.Create(0, "USD");
         }
 
-        public Product(Sku sku, Name name, Description description, Money price, int categoryId, bool isActive = true)
+
+        public Product(Sku sku, Name name, Description description, Money price, int? categoryId, bool isActive = true)
         {
             Sku = sku;
             Name = name;
@@ -35,7 +36,7 @@ namespace Evaluacion.IA.Domain.Entities
             CreateAt = DateTime.UtcNow;
         }
 
-        public void UpdateDetails(Name name, Description description, Money price, int categoryId, bool isActive)
+        public void UpdateDetails(Name name, Description description, Money price, int? categoryId, bool isActive)
         {
             Name = name;
             Description = description;

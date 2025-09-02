@@ -45,7 +45,8 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
                 return ApiResponse<ProductDto>.Failure("La moneda es requerida");
             }
 
-            if (request.CategoryId <= 0)
+
+            if (!request.CategoryId.HasValue || request.CategoryId.Value <= 0)
             {
                 return ApiResponse<ProductDto>.Failure("Debe seleccionar una categoría válida");
             }
@@ -58,7 +59,7 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
             }
 
             // Verificar que la categoría exista y esté activa
-            var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId);
+            var category = await _unitOfWork.Categories.GetByIdAsync(request.CategoryId.Value);
             if (category is null)
             {
                 return ApiResponse<ProductDto>.Failure($"No se encontró la categoría con ID {request.CategoryId}");
@@ -102,7 +103,7 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
                 product.Description.Value,
                 product.Price.Amount,
                 product.Price.Currency,
-                product.CategoryId,
+                product.CategoryId ?? 0,
                 category.Name.Value,
                 product.IsActive,
                 product.CreateAt,

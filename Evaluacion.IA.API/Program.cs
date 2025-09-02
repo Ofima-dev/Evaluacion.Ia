@@ -23,25 +23,4 @@ var app = builder.Build();
 // Configurar pipeline de Presentation
 app.ConfigurePresentationPipeline(builder.Configuration);
 
-// Inicialización de base de datos
-try
-{
-    await InfrastructureSettings.RunDatabaseMigrationsAsync(app.Services);
-    await InfrastructureSettings.SeedDatabaseAsync(app.Services);
-
-    // Log de configuración de aplicación
-    var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    ApplicationSettings.LogConfigurationSummary(app.Services, logger);
-    
-    // Log estadísticas de Presentation
-    var presentationStats = PresentationSettings.GetPresentationStatistics(app.Services);
-    logger.LogInformation($"Presentation Layer: {presentationStats}");
-}
-catch (Exception ex)
-{
-    var logger = app.Services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "Error during application initialization");
-    throw;
-}
-
 app.Run();

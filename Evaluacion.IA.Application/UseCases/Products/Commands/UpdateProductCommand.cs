@@ -10,6 +10,6 @@ public sealed record UpdateProductCommand(
     string Description,
     decimal Price,
     string Currency,
-    int CategoryId,
+    int? CategoryId,
     bool IsActive
 ) : IRequest<ApiResponse<ProductDto>>;
